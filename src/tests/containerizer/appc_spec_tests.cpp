@@ -37,6 +37,48 @@ class AppcSpecTest : public TemporaryDirectoryTest {};
 
 TEST_F(AppcSpecTest, ValidateImageManifest)
 {
+#if defined(__s390x__)
+  Try<JSON::Object> json = JSON::parse<JSON::Object>(
+      R"~(
+        {
+          "acKind": "ImageManifest",
+          "acVersion": "0.6.1",
+          "name": "foo.com/bar",
+          "labels": [
+            {
+              "name": "version",
+              "value": "1.0.0"
+            },
+            {
+              "name": "arch",
+              "value": "s390x"
+            },
+            {
+              "name": "os",
+              "value": "linux"
+            }
+          ],
+          "app" : {
+            "workingDirectory": "/opt/work",
+            "environment": [
+               {
+                 "name": "REDUCE_WORKER_DEBUG",
+                 "value": "true"
+               }
+            ],
+            "exec": [
+              "/usr/bin/sh",
+              "--quiet"
+            ]
+          },
+          "annotations": [
+            {
+              "name": "created",
+              "value": "1438983392"
+            }
+          ]
+        })~");
+#else
   Try<JSON::Object> json = JSON::parse<JSON::Object>(
       R"~(
         {
@@ -77,7 +119,7 @@ TEST_F(AppcSpecTest, ValidateImageManifest)
             }
           ]
         })~");
-
+#endif
   ASSERT_SOME(json);
 
   Try<spec::ImageManifest> imageManifest = spec::parse(stringify(json.get()));

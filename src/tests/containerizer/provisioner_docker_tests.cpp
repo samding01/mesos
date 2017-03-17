@@ -219,7 +219,11 @@ TEST_F(ProvisionerDockerLocalStoreTest, MetadataManagerInitialization)
 
   Image image;
   image.set_type(Image::DOCKER);
+#if defined(__s390x__)
+  image.mutable_docker()->set_name("s390x/debian");
+#else
   image.mutable_docker()->set_name("abc");
+#endif
 
   Future<slave::ImageInfo> imageInfo = store.get()->get(image, COPY_BACKEND);
   AWAIT_READY(imageInfo);
@@ -252,7 +256,11 @@ TEST_F(ProvisionerDockerLocalStoreTest, MissingLayer)
 
   Image image;
   image.set_type(Image::DOCKER);
+#if defined(__s390x__)
+  image.mutable_docker()->set_name("s390x/debian");
+#else
   image.mutable_docker()->set_name("abc");
+#endif
 
   Future<slave::ImageInfo> imageInfo = store.get()->get(
       image, flags.image_provisioner_backend.get());
@@ -419,7 +427,11 @@ TEST_F(ProvisionerDockerPullerTest, ROOT_LocalPullerSimpleCommand)
 
   Image image;
   image.set_type(Image::DOCKER);
+#if defined(__s390x__)
+  image.mutable_docker()->set_name("s390x/debian");
+#else
   image.mutable_docker()->set_name("alpine");
+#endif
 
   ContainerInfo* container = task.mutable_container();
   container->set_type(ContainerInfo::MESOS);
@@ -496,7 +508,11 @@ TEST_F(ProvisionerDockerPullerTest, ROOT_INTERNET_CURL_SimpleCommand)
 
   Image image;
   image.set_type(Image::DOCKER);
+#if defined(__s390x__)
+  image.mutable_docker()->set_name("s390x/debian");
+#else
   image.mutable_docker()->set_name("library/alpine");
+#endif
 
   ContainerInfo* container = task.mutable_container();
   container->set_type(ContainerInfo::MESOS);
@@ -571,7 +587,11 @@ TEST_F(ProvisionerDockerPullerTest, ROOT_INTERNET_CURL_Normalize)
 
   Image image;
   image.set_type(Image::DOCKER);
+#if defined(__s390x__)
+  image.mutable_docker()->set_name("s390x/debian");
+#else
   image.mutable_docker()->set_name("alpine");
+#endif
 
   ContainerInfo* container = task.mutable_container();
   container->set_type(ContainerInfo::MESOS);
@@ -645,7 +665,11 @@ TEST_F(ProvisionerDockerPullerTest, ROOT_INTERNET_CURL_ScratchImage)
 
   // 'hello-world' is a scratch image. It contains only one
   // binary 'hello' in its rootfs.
+#if defined(__s390x__)
+  image.mutable_docker()->set_name("s390x/debian");
+#else
   image.mutable_docker()->set_name("hello-world");
+#endif
 
   ContainerInfo* container = task.mutable_container();
   container->set_type(ContainerInfo::MESOS);
@@ -839,8 +863,11 @@ TEST_F(ProvisionerDockerPullerTest, ROOT_INTERNET_CURL_ImageDigest)
 
   Image image;
   image.set_type(Image::DOCKER);
+#if defined(__s390x__)
+  image.mutable_docker()->set_name("s390x/debian");
+#else
   image.mutable_docker()->set_name("library/alpine@" + digest);
-
+#endif
   ContainerInfo* container = task.mutable_container();
   container->set_type(ContainerInfo::MESOS);
   container->mutable_mesos()->mutable_image()->CopyFrom(image);
