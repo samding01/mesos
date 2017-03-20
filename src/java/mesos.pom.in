@@ -131,6 +131,7 @@
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
+          <maxmemory>512m</maxmemory>
           <sourcepath>@abs_top_srcdir@/src/java/src:@abs_top_builddir@/src/java/generated</sourcepath>
           <subpackages>org.apache.mesos</subpackages>
         </configuration>
